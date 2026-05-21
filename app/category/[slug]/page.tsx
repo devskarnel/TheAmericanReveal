@@ -31,11 +31,12 @@ const CATEGORY_CONFIG: Record<string, { bg: string; accent: string; label: strin
 
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params
-  const cat = CATEGORIES.find((c) => c.id === slug)
-  if (!cat) notFound()
+  const foundCat = CATEGORIES.find((c) => c.id === slug)
+  if (!foundCat) notFound()
+  const cat = foundCat as NonNullable<typeof foundCat>
 
   const articles = getArticlesByCategoryDB(slug)
-  const config = CATEGORY_CONFIG[slug] ?? CATEGORY_CONFIG.politics
+  const config   = CATEGORY_CONFIG[slug] ?? CATEGORY_CONFIG.politics
 
   return (
     <div>

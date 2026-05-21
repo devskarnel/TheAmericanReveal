@@ -47,16 +47,16 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params
-  const article = getArticleBySlugDB(slug)
-  if (!article) notFound()
+  const found = getArticleBySlugDB(slug)
+  if (!found) notFound()
+  const article = found as NonNullable<typeof found>
 
-  // Track real view — runs on every server render (force-dynamic)
+  // Track real view — best-effort, never crashes the page
   incrementArticleViews(article.id)
 
-  const related = getRelatedArticlesDB(article)
-  const catBg    = CATEGORY_COLORS[article.category] ?? 'bg-brand-red'
-  const catLabel = CATEGORY_LABELS[article.category] ?? article.category
-  // Use the just-incremented count so the page shows the updated number
+  const related    = getRelatedArticlesDB(article)
+  const catBg      = CATEGORY_COLORS[article.category] ?? 'bg-brand-red'
+  const catLabel   = CATEGORY_LABELS[article.category] ?? article.category
   const displayViews = (article.views ?? 0) + 1
 
   return (
