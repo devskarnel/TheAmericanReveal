@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-playfair);
+  --font-mono: var(--font-geist-mono);
+
+  /* ── Brand ── */
+  --color-brand-red: #C8102E;
+  --color-brand-red-light: #E01B2D;
+  --color-brand-red-dark: #A00E24;
+  --color-brand-gold: #C49A00;
+
+  /* ── Editorial Dark Scale (navbar, footer, hero) ── */
+  --color-navy: #0B1B30;
+  --color-navy-2: #0F2140;
+  --color-navy-3: #122650;
+  --color-navy-border: rgba(255,255,255,0.08);
+
+  /* ── Editorial Light Scale (content sections) ── */
+  --color-cream: #F6F3EE;
+  --color-cream-2: #EDE9E1;
+  --color-light-border: #E0DAD0;
+
+  /* ── Surface scale (admin / dark UI) ── */
+  --color-surface-900: #0C0C10;
+  --color-surface-800: #111116;
+  --color-surface-700: #17171E;
+  --color-surface-600: #1E1E28;
+  --color-surface-500: #26262F;
+  --color-surface-400: #32323D;
+
+  /* ── Text on Dark ── */
+  --color-ink-100: #F2EFE8;
+  --color-ink-300: #C8C5BC;
+  --color-ink-500: #8895A8;
+  --color-ink-700: #4A5568;
+
+  /* ── Text on Light ── */
+  --color-slate-900: #0B1B30;
+  --color-slate-700: #1E3A5F;
+  --color-slate-500: #4A5568;
+  --color-slate-400: #6B7280;
+  --color-slate-200: #E5E7EB;
+
+  /* ── Accent ── */
+  --color-accent: #4A9EBF;
+
+  /* Legacy */
+  --color-dark-900: #0C0C10;
+  --color-dark-800: #111116;
+}
+
+:root {
+  --background: #F6F3EE;
+  --foreground: #0B1B30;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0B1B30; }
+::-webkit-scrollbar-thumb { background: #C8102E; border-radius: 3px; }
+
+/* ─── Display font utility ── */
+.font-display { font-family: var(--font-playfair), 'Playfair Display', Georgia, serif; }
+
+/* ─── Glass (admin / dark sections only) ── */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+/* ─── Card (light sections) ── */
+.card-light {
+  background: #FFFFFF;
+  border: 1px solid #E0DAD0;
+  box-shadow: 0 1px 4px rgba(11,27,48,0.06), 0 4px 16px rgba(11,27,48,0.04);
+}
+.card-light:hover {
+  box-shadow: 0 4px 20px rgba(11,27,48,0.10), 0 1px 4px rgba(11,27,48,0.06);
+}
+
+/* ─── Section dividers ── */
+.section-rule {
+  border-top: 3px solid #C8102E;
+}
+.section-rule-thin {
+  border-top: 1px solid #E0DAD0;
+}
+
+/* ─── Editorial underline ── */
+.headline-underline {
+  display: inline-block;
+  position: relative;
+}
+.headline-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: #C8102E;
+}
+
+/* ─── Breaking / Live badge ── */
+.badge-breaking {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: #C8102E;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ─── Category label ── */
+.category-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+}
+
+/* ─── Category badge (admin / dark) ── */
+.category-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 3px;
+}
+
+/* ─── Ticker animation ── */
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker 60s linear infinite; }
+
+/* ─── Pulse (live indicator) ── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* ─── Shimmer skeleton ── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ─── Reading progress bar ── */
+#reading-progress {
+  height: 3px;
+  background: #C8102E;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ─── Article prose ── */
+.article-prose { color: #2D3748; line-height: 1.85; font-size: 1.0625rem; }
+.article-prose h2 {
+  font-family: var(--font-playfair), Georgia, serif;
+  color: #0B1B30; font-size: 1.6rem; font-weight: 700;
+  margin: 2.5rem 0 1rem; padding-bottom: 0.5rem;
+  border-bottom: 2px solid #C8102E;
+}
+.article-prose h3 {
+  color: #0B1B30; font-size: 1.2rem; font-weight: 700;
+  margin: 2rem 0 0.75rem;
+}
+.article-prose p { margin: 1.25rem 0; }
+.article-prose a { color: #C8102E; text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.article-prose blockquote {
+  border-left: 4px solid #C8102E;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  background: #FDF5F5;
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #1A2840;
+}
+.article-prose ul, .article-prose ol { margin: 1.25rem 0; padding-left: 1.75rem; }
+.article-prose li { margin: 0.6rem 0; }
+.article-prose img { max-width: 100%; height: auto; margin: 1.75rem auto; display: block; border-radius: 4px; }
+.article-prose strong { color: #0B1B30; font-weight: 700; }
+.article-prose code {
+  background: #F0EDE8;
+  color: #C8102E;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  font-size: 0.875em;
+}
+
+/* ─── Gradient text ── */
+.gradient-text {
+  background: linear-gradient(135deg, #C8102E, #E01B2D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── TipTap editor ── */
+.ProseMirror { min-height: 400px; padding: 1.25rem; outline: none; color: #F2EFE8; line-height: 1.8; font-size: 1rem; }
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #50505E; content: attr(data-placeholder); float: left; height: 0; pointer-events: none;
+}
+.ProseMirror p { margin: 0.75rem 0; color: #F2EFE8; }
+.ProseMirror h1 { color: #FFFFFF; font-size: 1.8rem; font-weight: 700; margin: 1.75rem 0 0.75rem; }
+.ProseMirror h2 { color: #FFFFFF; font-size: 1.45rem; font-weight: 700; margin: 1.5rem 0 0.6rem; border-bottom: 1px solid rgba(200,16,46,0.4); padding-bottom: 0.3rem; }
+.ProseMirror h3 { color: #FFFFFF; font-size: 1.15rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+.ProseMirror strong { color: #FFFFFF; font-weight: 700; }
+.ProseMirror em { color: #C8C5BC; font-style: italic; }
+.ProseMirror s { color: #8895A8; text-decoration: line-through; }
+.ProseMirror code { background: rgba(255,255,255,0.08); color: #74C0FC; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.875em; }
+.ProseMirror blockquote { border-left: 3px solid rgba(200,16,46,0.6); padding: 0.75rem 1.25rem; margin: 1.25rem 0; background: rgba(255,255,255,0.03); color: #C8C5BC; font-style: italic; }
+.ProseMirror ul { list-style: disc; padding-left: 1.5rem; margin: 0.75rem 0; }
+.ProseMirror ol { list-style: decimal; padding-left: 1.5rem; margin: 0.75rem 0; }
+.ProseMirror li { color: #F2EFE8; margin: 0.3rem 0; }
+.ProseMirror a { color: #C8102E; text-decoration: underline; }
+.ProseMirror img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); display: block; }
+
+/* ─── Cyber grid (admin bg) ── */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(200, 16, 46, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 16, 46, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Glow utilities (admin) ── */
+.glow-red { box-shadow: 0 2px 12px rgba(200, 16, 46, 0.2); }

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "WebFetch(domain:www.facebook.com)",
+      "WebFetch(domain:m.facebook.com)",
+      "WebFetch(domain:mbasic.facebook.com)",
+      "WebFetch(domain:www.newsweek.com)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "WebFetch(domain:www.dailymail.co.uk)"
+    ]
+  }
+}
