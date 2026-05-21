@@ -5,18 +5,22 @@ const ADMIN_COOKIE = 'tar_admin_auth'
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const isAuthenticated = request.cookies.get(ADMIN_COOKIE)?.value === 'authenticated'
 
-  // Allow login page through
-  if (pathname === '/admin/login') return NextResponse.next()
+  // Not an admin route — pass through
+  if (!pathname.startsWith('/admin')) return NextResponse.next()
 
-  // Protect all /admin routes
-  if (pathname.startsWith('/admin')) {
-    const auth = request.cookies.get(ADMIN_COOKIE)
-    if (!auth || auth.value !== 'authenticated') {
-      const loginUrl = new URL('/admin/login', request.url)
-      loginUrl.searchParams.set('from', pathname)
-      return NextResponse.redirect(loginUrl)
-    }
+  // Login page: let unauthenticated users in; redirect authenticated away
+  if (pathname === '/admin/login') {
+    if (isAuthenticated) return NextResponse.redirect(new URL('/admin', request.url))
+    return NextResponse.next()
+  }
+
+  // All other /admin/* routes require the cookie
+  if (!isAuthenticated) {
+    const loginUrl = new URL('/admin/login', request.url)
+    loginUrl.searchParams.set('from', pathname)
+    return NextResponse.redirect(loginUrl)
   }
 
   return NextResponse.next()
