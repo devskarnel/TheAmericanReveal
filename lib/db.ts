@@ -9,19 +9,26 @@ interface DB {
   articles: Article[]
 }
 
+function writeDB(db: DB): void {
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8')
+  } catch {
+    // Read-only filesystem (e.g. Vercel) — writes are best-effort only
+  }
+}
+
 function readDB(): DB {
   try {
     if (fs.existsSync(DB_PATH)) {
-      return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'))
+      const raw = fs.readFileSync(DB_PATH, 'utf-8')
+      const parsed = JSON.parse(raw) as DB
+      if (Array.isArray(parsed?.articles)) return parsed
     }
   } catch {}
+  // Fall back to seed data; write attempt is silently ignored if filesystem is read-only
   const db: DB = { articles: seedArticles }
-  try { writeDB(db) } catch {}
+  writeDB(db)
   return db
-}
-
-function writeDB(db: DB) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), 'utf-8')
 }
 
 export function getAllArticles(): Article[] {
@@ -38,7 +45,7 @@ export function getArticleBySlugDB(slug: string): Article | undefined {
 
 export function createArticle(data: Partial<Article>): Article {
   const db = readDB()
-  const article = {
+  const article: Article = {
     ...data,
     id: data.id || String(Date.now()),
     comments: data.comments ?? [],
@@ -99,9 +106,13 @@ export function getAllPublishedArticles(): Article[] {
 }
 
 export function incrementArticleViews(id: string): void {
-  const db = readDB()
-  const idx = db.articles.findIndex(a => a.id === id)
-  if (idx === -1) return
-  db.articles[idx].views = (db.articles[idx].views ?? 0) + 1
-  writeDB(db)
+  try {
+    const db = readDB()
+    const idx = db.articles.findIndex(a => a.id === id)
+    if (idx === -1) return
+    db.articles[idx].views = (db.articles[idx].views ?? 0) + 1
+    writeDB(db)
+  } catch {
+    // Non-critical — never crash the page over a view count
+  }
 }
